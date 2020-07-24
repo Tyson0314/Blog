@@ -1,8 +1,11 @@
 package com.zzx.utils;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Component
 public class RequestUtil {
@@ -34,5 +37,17 @@ public class RequestUtil {
             ip = ip.substring(0, ip.indexOf(",")).trim();
         }
         return ip;
+    }
+
+    /**
+     * 获取HttpServletRequest
+     * <br/>
+     * @param
+     * @return javax.servlet.http.HttpServletRequest
+     * @author Tyson
+     * @date 2020/7/24/0024 22:27
+     */
+    public static HttpServletRequest getHttpServletRequest() {
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 }

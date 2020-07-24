@@ -37,7 +37,9 @@ public class JwtTokenUtil implements Serializable {
      */
     public String getUsernameFromRequest(HttpServletRequest request) {
         String token = request.getHeader(jwtConfig.getHeader());
-        token = token.substring(jwtConfig.getPrefix().length());
+        if (token != null) {
+            token = token.substring(jwtConfig.getPrefix().length());
+        }
 
         return token == null ? null : getUsernameFromToken(token);
     }

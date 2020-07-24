@@ -5,7 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -94,5 +100,25 @@ public class FileUtil {
             }
         }
         return files;
+    }
+
+    /**
+     * inputStream 转 File
+     */
+    static File inputStreamToFile(InputStream ins, String name) throws Exception{
+        File file = new File(System.getProperty("java.io.tmpdir") + File.separator + name);
+        if (file.exists()) {
+            return file;
+        }
+        OutputStream os = new FileOutputStream(file);
+        int bytesRead;
+        int len = 8192;
+        byte[] buffer = new byte[len];
+        while ((bytesRead = ins.read(buffer, 0, len)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        os.close();
+        ins.close();
+        return file;
     }
 }
