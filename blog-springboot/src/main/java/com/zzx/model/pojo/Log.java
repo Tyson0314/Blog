@@ -21,4 +21,5 @@ public class Log {
     private String address;
     private Date createTime;
     private Long time;
+    private String description;
 }

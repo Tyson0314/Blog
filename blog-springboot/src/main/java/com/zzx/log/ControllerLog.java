@@ -6,6 +6,7 @@ import com.zzx.utils.DateUtil;
 import com.zzx.utils.JwtTokenUtil;
 import com.zzx.utils.RequestUtil;
 import com.zzx.utils.StringUtils;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -93,6 +94,9 @@ public class ControllerLog {
         Method method = signature.getMethod();
         // 方法路径
         String methodName = pjp.getTarget().getClass().getName()+"."+signature.getName()+"()";
+        //获取注解
+        ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+        String annoValue = apiOperation.value();
 
         StringBuilder params = new StringBuilder("{");
         //参数值
@@ -107,7 +111,6 @@ public class ControllerLog {
         String username = jwtTokenUtil.getUsernameFromRequest(request);
         String ip = requestUtil.getIpAddress(request);
 
-//        HttpServletRequest request = RequestUtil.getHttpServletRequest();
         Log log = new Log();
         log.setCreateTime(dateUtil.getCurrentDate());
         log.setIp(ip);
@@ -116,6 +119,7 @@ public class ControllerLog {
         log.setTime(time);
         log.setMethod(methodName);
         log.setParams(params.toString() + " }");
+        log.setDescription(annoValue);
 
         logService.saveLog(log);
 

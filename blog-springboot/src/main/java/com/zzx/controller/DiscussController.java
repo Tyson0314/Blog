@@ -5,6 +5,7 @@ import com.zzx.model.entity.Result;
 import com.zzx.model.entity.StatusCode;
 import com.zzx.model.pojo.Discuss;
 import com.zzx.service.DiscussService;
+import com.zzx.service.UserService;
 import com.zzx.utils.FormatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,9 @@ public class DiscussController {
     @Autowired
     private FormatUtil formatUtil;
 
+    @Autowired
+    private UserService userService;
+
 
 
     @ApiOperation(value = "发布评论", notes = "评论内容+博文id")
@@ -37,6 +41,7 @@ public class DiscussController {
         }
 
         discussService.saveDiscuss(discussBody, blogId);
+        userService.sendMail(userService.findUserMail());
         return Result.create(StatusCode.OK, "评论成功");
     }
 
